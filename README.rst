@@ -1,0 +1,71 @@
+FilterCoffee 
+============
+
+FilterCoffee is a simple WSG middleware for compiling CoffeeScript to JavaScript
+on the fly. It is intended for use in the development of WSGI applicatons, but
+for deployed applications you should use some other strategy for delivering your
+compiled CoffeeScript (e.g., write a script to compile all your CoffeeScripts to
+JavaScript).
+
+FilterCoffee cached the compiled CoffeeScripts in memory but will recompile
+scripts when they are modified. A CoffeeScript compilation error results in the
+request returning a ``500`` error containing the CoffeeScript error message in
+the body. Error messages are also output to the ``wsgi.error`` stream so that
+they will show up in your console or error log. 
+
+
+Installation
+------------
+
+FilterCoffee depends on CoffeeScript and in turn node.js. CoffeeScript expects
+the ``coffee`` command to be available on the command line. See the installation
+instructions for CoffeeScript for more information:
+http://coffeescript.org/#installation
+
+There are a number of different ways to install CoffeeFilter:
+
+For an Individual Applicaiton
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Copy ``filtercoffee.py`` into an appropriate place in your WSGI applications
+code.
+
+System Wide from Downloaded Source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run::
+
+  python setup.py install
+
+Basic Usage
+-----------
+
+You can wrap your WSGI application in the FilterCoffee middleware like so
+(assuming that the variable ``app`` contains your WSGI application and the
+variable ``debug`` is only set when the application is in development mode::
+
+  if debug:
+      import filtercoffee
+      app = filtercoffee.FilterCoffee(
+                  app,
+	          static_dir='/path/to/static/files')
+
+FilterCoffee will now intercept any request that ends in ``.js`` and check if a
+corresponding ``.coffee`` file exists. If a ``.coffee`` file exists it will be
+compiled and the comiled output will be returned in the response (the compiled
+output is also cached such that recompilation only occurs if the ``.coffee``
+file changes). If no ``.coffee`` file exists, the original application is called
+to handle the request.
+
+Advanced Usage
+--------------
+
+FilterCoffee has flexible support for deciding what it should consider a Coffee-
+or JavaScripts. Check the arguments to FilterCoffee's ``__init__`` method.
+
+Related Software
+----------------
+
+  http://github.com/dsc/coffeecup
+    Uses the ``coffee`` commands ``watch`` option to recompile files and leaves
+    the resulting JavaScript files in the file system.
