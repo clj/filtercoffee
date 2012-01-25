@@ -1,3 +1,4 @@
 FilterCoffee.egg-info/
+dist
 .*.sw?
 *.pyc
