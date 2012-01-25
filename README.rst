@@ -7,22 +7,29 @@ for deployed applications you should use some other strategy for delivering your
 compiled CoffeeScript (e.g., write a script to compile all your CoffeeScripts to
 JavaScript).
 
-FilterCoffee cached the compiled CoffeeScripts in memory but will recompile
+FilterCoffee caches the compiled CoffeeScripts in memory but will recompile
 scripts when they are modified. A CoffeeScript compilation error results in the
 request returning a ``500`` error containing the CoffeeScript error message in
 the body. Error messages are also output to the ``wsgi.error`` stream so that
-they will show up in your console or error log. 
+they will show up in your console or in your servers error log. 
 
 
 Installation
 ------------
 
 FilterCoffee depends on CoffeeScript and in turn node.js. CoffeeScript expects
-the ``coffee`` command to be available on the command line. See the installation
+the ``coffee`` command to be available on the current PATH. See the installation
 instructions for CoffeeScript for more information:
 http://coffeescript.org/#installation
 
 There are a number of different ways to install CoffeeFilter:
+
+Using PIP
+~~~~~~~~~
+
+This is the preferred method. Run::
+
+  pip install filtercoffee
 
 For an Individual Applicaiton
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,11 +68,25 @@ Advanced Usage
 --------------
 
 FilterCoffee has flexible support for deciding what it should consider a Coffee-
-or JavaScripts. Check the arguments to FilterCoffee's ``__init__`` method.
+or JavaScript. Check the arguments to FilterCoffee's ``__init__`` method.
 
 Related Software
 ----------------
 
   http://github.com/dsc/coffeecup
-    Uses the ``coffee`` commands ``watch`` option to recompile files and leaves
-    the resulting JavaScript files in the file system.
+    Uses the ``coffee`` command's ``watch`` option to recompile files and leaves
+    the resulting JavaScript files in the file system. This is in contrast with
+    FilterCoffee which does its own caching and does not leave .js files in the
+    filesystem.
+
+Changelog
+=========
+
+0.2 Jan 25, 2012
+
+* Documentation Updates
+* PyPI
+
+0.1 Jan 17, 2012
+
+* Initial release
